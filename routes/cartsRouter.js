@@ -17,7 +17,7 @@ router.post("/:cid/product/:pid", (req, res) => {
 
     const createCart = cartsManager.createCarts(cid, pid)
 
-    return res.send(200).json(createCart)
+    return res.status(200).json(createCart)
 })
 
 export default router;
