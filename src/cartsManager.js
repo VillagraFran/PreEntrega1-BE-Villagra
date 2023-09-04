@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { read } from "fs";
 
 class CartsManager {
     static id = 0;
@@ -19,43 +19,43 @@ class CartsManager {
         }
     }
 
-    createCart(cid, pid) {
-        try {
-            const exist = fs.existsSync(this.path)
-            let arrCarts = []
-            let status = {}
+    async createCart(cid) {
+        const readCarts = await fs.promises.readFile(this.path, "utf-8")
+        const carts = JSON.parse(readCarts)
 
-            if (exist) {
-                const readCarts = fs.readFileSync(this.path, "utf-8")
-                arrCarts = JSON.parse(readCarts)
-            }
-            
-            const product = { product: pid, quantity: 1 }
-                
-            const existCart = arrCarts.findIndex((cr) => cr.id === cid)
-            
-            if (existCart !== -1) {
-                const existProduct = arrCarts[existCart].products.findIndex((pr) => pr.product === pid)
-                
-                if (existProduct !== -1) {
-                    arrCarts[existCart].products[existProduct].quantity++;
-                } else {
-                    arrCarts[existCart].products.push(product)
-                }
+        const existCart = carts.findIndex((cr) => cr.id === cid)
 
-                status = { message: "producto agregado" }
-            
+        if (existCart !== -1) {
+            return({error: "Ya existe un carrito con ese Id"})
+        } else {
+            const cart = {id: cid, products:[]}
+            carts.push(cart)
+            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
+
+            return({messege: "carrito creado"})
+        }
+    }
+
+    async addProductCart(cid, pid) {
+        const readCarts = await fs.promises.readFile(this.path, "utf-8")
+        const carts = JSON.parse(readCarts)
+
+        const product = {product: pid, quantity: 1}
+        const existCart = carts.findIndex((cr) => cr.id === cid)
+
+        if (existCart !== -1) {
+            const existProd = carts[existCart].products.findIndex((pr) => pr.product === pid)
+
+            if (existProd !== -1) {
+                carts[existCart].products[existProd].quantity++;
             } else {
-                arrCarts.push({ id: cid, products: [product] })
-                status = { message: "carrito creado" }
+                carts[existCart].products.push(product)
             }
-                
-            fs.writeFileSync(this.path, JSON.stringify(arrCarts))
-            CartsManager.id++;
-            return status;
 
-        } catch (error) {
-            throw error;
+            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, "\t"))
+            return({messege: "producto agregado al carrito"})
+        } else {
+            return({error: "el carrito seleccionado no existe"})
         }
     }
 }

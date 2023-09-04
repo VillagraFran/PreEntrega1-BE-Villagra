@@ -15,8 +15,8 @@ class ProductManager{
     }
 
     addProduct(title, description, price, thumbnail, code, stock, category) {
+
         const product = {
-            id: ProductManager.id,
             title,
             description,
             price,
@@ -31,23 +31,24 @@ class ProductManager{
         
         if (exist) {
             const arrProd = this.getProducts()
+            const id = arrProd.reduce((finalId, pr) => (pr.id > finalId ? pr.id : finalId), 0)
+            product.id = id + 1;
             
             const prodExist = arrProd.find((pr) => pr.code === product.code)
             if (prodExist) {
-                console.log(`
-                ---------------------
-                product already exist
-                ---------------------
-                `)
+                return({ error: "El producto ya existe" })
             } else {
-                fs.writeFileSync(this.path, JSON.stringify([...arrProd, product]))
-                ProductManager.id ++;  
+                arrProd.push(product)
+                fs.writeFileSync(this.path, JSON.stringify(arrProd, null, "\t"))
             }
         } else {
+            const arrProd = this.getProducts()
+            const id = arrProd.reduce((finalId, pr) => (pr.id > finalId ? pr.id : finalId), 0)
+            product.id = id + 1;
             fs.writeFileSync(this.path, JSON.stringify([product]))
-            ProductManager.id ++;  
         }
 
+        return({ message: "Producto creado" })
     }
 
 

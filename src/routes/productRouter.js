@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ProductManager from '../src/productManager.js';
+import ProductManager from '../productManager.js';
 
 const productManager = new ProductManager;
 const router = Router();
@@ -29,9 +29,9 @@ router.post("/", (req, res) => {
         return res.status(400).json({ error: "complete todos los campos" });
     }
 
-    productManager.addProduct(title, description, price, thumbnail, code, stock, category);
+    const addProduct = productManager.addProduct(title, description, price, thumbnail, code, stock, category);
 
-    return res.status(201).json({ message: "Producto agregado" });
+    return res.send(addProduct);
 });
 
 router.put("/:pid", (req, res) => {
