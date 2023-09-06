@@ -11,7 +11,6 @@ class ProductManager{
         const readProducts = fs.readFileSync(this.path, 'utf-8')
         const arrProd = JSON.parse(readProducts)
         return(arrProd)
-
     }
 
     addProduct(title, description, price, thumbnail, code, stock, category) {
