@@ -31,7 +31,8 @@ router.post("/", (req, res) => {
 
     const addProduct = productManager.addProduct(title, description, price, thumbnail, code, stock, category);
 
-    return res.send(addProduct);
+    req.context.socketServer.emit('new-product', addProduct)
+    return res.status(200).send();
 });
 
 router.put("/:pid", (req, res) => {
@@ -54,8 +55,9 @@ router.put("/:pid", (req, res) => {
 router.delete("/:pid", (req, res) => {
     const pid = parseInt(req.params.pid)
 
-    productManager.deleteProduct(pid)
+    const deletePid = productManager.deleteProduct(pid)
 
+    req.context.socketServer.emit('delete-product', deletePid)
     return res.status(200).json({ message: "Producto eliminado" });
 })
 

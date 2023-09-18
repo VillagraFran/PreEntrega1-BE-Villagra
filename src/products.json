@@ -31,5 +31,16 @@
 		"stock": 10,
 		"category": "gorras",
 		"id": 2
+	},
+	{
+		"title": "gorrito",
+		"description": "se usa en la cabeza",
+		"price": 1000,
+		"thumbnail": "img",
+		"code": 4,
+		"status": true,
+		"stock": 10,
+		"category": "gorras",
+		"id": 3
 	}
 ]

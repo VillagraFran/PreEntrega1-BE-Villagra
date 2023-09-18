@@ -1,3 +1,14 @@
-{{#each products}}
-    <p>{{this.title}}</p>
-{{/each}}
+<h2>PRODUCTOS</h2>
+
+<div id="product-container">
+    {{#each products}}
+        <div>
+            <h5>{{this.title}}</h5>
+            <p>{{this.price}}</p>
+        </div>
+    {{/each}}
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/static/js/index.js"></script>

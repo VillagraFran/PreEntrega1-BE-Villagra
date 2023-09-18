@@ -47,7 +47,7 @@ class ProductManager{
             fs.writeFileSync(this.path, JSON.stringify([product]))
         }
 
-        return({ message: "Producto creado" })
+        return(product)
     }
 
 
@@ -60,7 +60,8 @@ class ProductManager{
             }
         })
 
-        fs.writeFileSync(this.path, JSON.stringify(filtred))
+        fs.writeFileSync(this.path, JSON.stringify(filtred, null, "\t"))
+        return(filtred)
     }
 
     updateProduct(pid, fieldToUpdate, valueUpdated) {
@@ -74,7 +75,7 @@ class ProductManager{
             }
         });
     
-        fs.writeFileSync(this.path, JSON.stringify(updatedProducts));
+        fs.writeFileSync(this.path, JSON.stringify(updatedProducts, null, "\t"));
     }
 
     getProductById(pid) {
