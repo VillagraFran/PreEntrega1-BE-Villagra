@@ -1,9 +1,14 @@
 import express from "express"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io";
-import productRouter from "./routes/productRouter.js";
 import cartRouter from "./routes/cartsRouter.js"
 import viewsRouter from "./routes/viewsRouter.js"
+import productRouter from "./routes/product.router.js"
+import mongoose from "mongoose";
+
+import { messageModel } from "./dao/models/message.model.js";
+
+mongoose.connect("mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority")
 
 const app = express()
 const httpServer = app.listen(8080, ()=>console.log("on"))
@@ -25,3 +30,11 @@ app.use((req, res, next) => {
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
+
+socketServer.on("connection", (socket) => {
+    socket.on("message", async (data) => {
+        await messageModel.create(data);
+        const messages = messageModel.find().lean();
+        socketServer.emit("new-message", messages);
+    })
+})
