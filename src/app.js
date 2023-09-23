@@ -1,7 +1,7 @@
 import express from "express"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io";
-import cartRouter from "./routes/cartsRouter.js"
+import cartsRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/viewsRouter.js"
 import productRouter from "./routes/product.router.js"
 import mongoose from "mongoose";
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
-app.use('/api/carts', cartRouter);
+app.use('/api/carts', cartsRouter);
 
 socketServer.on("connection", (socket) => {
     socket.on("message", async (data) => {
