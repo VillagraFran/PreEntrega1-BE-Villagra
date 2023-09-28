@@ -29,4 +29,35 @@ router.post("/:cid/product/:pid", async(req, res) => {
     res.send(addProduct)
 })
 
+router.put("/:cid", async (req, res) => {
+    const cid = req.params.cid
+
+    res.send(await cartsManager.modifyCart(cid))
+})
+
+router.put("/:cid/product/:pid", async(req, res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
+    const {quantity} = req.body;
+
+    const modifyProduct =await cartsManager.modifyProduct(cid, pid, quantity)
+
+    res.send(modifyProduct)
+})
+
+router.delete("/:cid", async (req, res) => {
+    const cid = req.params.cid
+
+    res.send(await cartsManager.deleteCart(cid))
+})
+
+router.delete("/:cid/product/:pid", async(req, res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
+
+    const deleteProduct =await cartsManager.deleteProduct(cid, pid)
+
+    res.send(deleteProduct)
+})
+
 export default router;
