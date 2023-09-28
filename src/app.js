@@ -34,7 +34,7 @@ app.use('/api/carts', cartsRouter);
 socketServer.on("connection", (socket) => {
     socket.on("message", async (data) => {
         await messageModel.create(data);
-        const messages = messageModel.find().lean();
+        const messages = await messageModel.find().lean();
         socketServer.emit("new-message", messages);
     })
 })

@@ -6,7 +6,21 @@ const productManager = new ProductManager();
 const router = Router()
 
 router.get("/", async (req, res) => {
-    res.send(await productManager.getProducts())
+    const {limit, page, query, sort} = req.query;
+
+    const sortOptions = {
+        asd: {price: 1},
+        desc: {price: -1}
+    }
+
+    const limitModel = limit ? parseInt(limit, 10) : 10;
+    const pageModel = page ? parseInt(page, 10) : 1;
+    const queryModel = query ?? {};
+    const sortModel = sortOptions[sort] ?? undefined;
+
+
+    const products = await productManager.getProducts(limitModel, pageModel, queryModel, sortModel)
+    res.send(products)
 })
 
 router.post('/', uploader.single('file'), async (req, res) => {

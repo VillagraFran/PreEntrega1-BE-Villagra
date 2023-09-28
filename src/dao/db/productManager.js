@@ -16,9 +16,27 @@ class productManager {
         return product;
     }
 
-    async getProducts() {
-        const products = await productModel.find().lean()
-        return products;
+    async getProducts(limit, page, query, sort) {
+        const products = await productModel.paginate(query, { 
+            page: page,
+            limit: limit, 
+            sort: sort 
+        })
+
+        const pageProducts = {
+            status: "success",
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `http://localhost:8080/products/${products.prevPage}` : '',
+            nextLink: products.hasNextPage ? `http://localhost:8080/products/${products.nextPagePage}` : ''
+        }
+
+        return pageProducts;
     }
 
     async deleteProduct(pid) {

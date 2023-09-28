@@ -6,6 +6,11 @@ class cartManager {
         return carts;
     }
 
+    async getCartById(cid) {
+        const carts = await cartModel.findOne({_id: cid}).populate('products.product');
+        return carts;
+    }
+
     async createCart(cart) {
         const newCart = await cartModel.create(cart)
         return newCart.id;
@@ -14,7 +19,7 @@ class cartManager {
     async addProduct(cid, pid) {
         const cart = await cartModel.findOne({"_id": cid})
 
-        const product = cart.products.find((pr) => pr.product === pid)
+        const product = cart.products.find(({ product }) => product.toString() === pid)
 
         if (product !== undefined) {
             product.quantity++;

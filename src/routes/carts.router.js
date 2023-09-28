@@ -8,6 +8,12 @@ router.get("/", async (req, res) => {
     res.send(await cartsManager.getCarts())
 })
 
+router.get("/:cid", async (req, res) => {
+    const cid = req.params.cid
+
+    res.send(await cartsManager.getCartById(cid))
+})
+
 router.post("/", async(req, res) => {
     const cart ={ products: [] }
     const newCart = await cartsManager.createCart(cart)
