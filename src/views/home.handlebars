@@ -49,9 +49,13 @@
             </div>
         </div>
     {{/each}}
-    <div class="links">
+    <div class="links" style="display: flex;">
         {{#if prevLink}}
-            <a href="" class="btn"></a>
+            <a href={{prevLink}} class="btn btn-primary">Página Anterior</a>
+        {{/if}}
+        {{#if nextLink}}
+            <a href={{nextLink}} class="btn btn-primary">Página Siguiente</a>
+        {{/if}}
     </div>
 </div>
 

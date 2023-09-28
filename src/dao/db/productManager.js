@@ -32,8 +32,8 @@ class productManager {
             page: products.page,
             hasPrevPage: products.hasPrevPage,
             hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? `http://localhost:8080/products/${products.prevPage}` : '',
-            nextLink: products.hasNextPage ? `http://localhost:8080/products/${products.nextPagePage}` : ''
+            prevLink: products.hasPrevPage ? `http://localhost:8080/products/?page=${products.prevPage}` : '',
+            nextLink: products.hasNextPage ? `http://localhost:8080/products/?page=${products.nextPage}` : ''
         }
 
         return pageProducts;
