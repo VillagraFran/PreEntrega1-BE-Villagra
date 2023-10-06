@@ -4,9 +4,11 @@ import { Server } from "socket.io";
 import cartsRouter from "./routes/carts.router.js"
 import viewsRouter from "./routes/viewsRouter.js"
 import productRouter from "./routes/product.router.js"
+import usersRouter from "./routes/users.router.js"
 import mongoose from "mongoose";
-
 import { messageModel } from "./dao/models/message.model.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 mongoose.connect("mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority")
 
@@ -27,6 +29,19 @@ app.use((req, res, next) => {
     next()
 });
 
+app.use(
+    session({
+        store: MongoStore.create({
+            mongoUrl:"mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority",
+            ttl: 100
+        }),
+        secret:"jksajskajska",
+        resave: false,
+        saveUninitialized: false,
+    })
+)
+
+app.use('/api', usersRouter);
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartsRouter);

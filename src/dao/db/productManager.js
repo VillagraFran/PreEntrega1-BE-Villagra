@@ -17,10 +17,12 @@ class productManager {
     }
 
     async getProducts(limit, page, query, sort) {
+
         const products = await productModel.paginate(query, { 
             page: page,
             limit: limit, 
-            sort: sort 
+            sort: sort,
+            lean: true
         })
 
         const pageProducts = {

@@ -1,12 +1,26 @@
 import { Router } from "express";
 import ProductManager from '../dao/db/productManager.js';
 import CartsManager from "../dao/db/cartManager.js";
+import publicRoutes from "../middlewares/publicRoutes.js";
+
 
 const productManager = new ProductManager();
 const cartManager = new CartsManager();
 const router = Router();
 
 router.get("/products", async (req, res) => {
+    if (!req.session.isLogged) {
+        return res.redirect("/singup")
+    }
+    //----PERFIL----//
+    const user = {
+        first_name: req.session.first_name,
+        last_name: req.session.last_name,
+        email: req.session.email,
+        rol: req.session.rol === "admin" ?? false,
+    }
+
+    //----PRODUCTOS----//
     const {limit, page, query, sort} = req.query;
 
     const sortOptions = {
@@ -18,10 +32,10 @@ router.get("/products", async (req, res) => {
     const pageModel = page ? parseInt(page, 10) : 1;
     const queryModel = query ?? {};
     const sortModel = sortOptions[sort] ?? undefined;
-    
+
     const products = await productManager.getProducts(limitModel, pageModel, queryModel, sortModel)
 
-    res.render("home", { products: products.payload, prevLink: products.prevLink, nextLink: products.nextLink})
+    res.render("home", {user: user, products: products.payload, prevLink: products.prevLink, nextLink: products.nextLink })
 });
 
 router.get("/cart", async (req, res) => {
@@ -36,5 +50,15 @@ router.get("/chat", (req, res) => {
     })
     res.render("chat", {})
 });
+
+router.get("/login",publicRoutes, (req, res) => {
+
+    res.render("login")
+})
+
+router.get("/singup",publicRoutes, (req, res) => {
+
+    res.render("register")
+})
 
 export default router;

@@ -7,7 +7,7 @@ class cartManager {
     }
 
     async getCartById(cid) {
-        const carts = await cartModel.findOne({_id: cid}).populate('products.product');
+        const carts = await cartModel.findOne({_id: cid}).populate('products.product').lean();
         return carts;
     }
 
