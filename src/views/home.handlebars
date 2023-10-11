@@ -1,4 +1,17 @@
-<h2>Bienvenido {{user.first_name}} {{user.last_name}}</h2>
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">¡Te damos la bienvenida {{user.first_name}} {{user.last_name}}! </a>
+    <form 
+        class="d-flex"
+        action="http://localhost:8080/api/logout"
+        method="post"
+    >
+        <button class="btn btn-outline-success" type="submit">
+            Cerrar seción
+        </button>
+    </form>
+  </div>
+</nav>
 
 {{#if user.rol}}
     <form 
