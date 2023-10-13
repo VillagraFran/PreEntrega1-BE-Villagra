@@ -2,16 +2,15 @@ import { Router } from "express";
 import ProductManager from '../dao/db/productManager.js';
 import CartsManager from "../dao/db/cartManager.js";
 import publicRoutes from "../middlewares/publicRoutes.js";
+import privateRoutes from "../middlewares/privateRoutes.js";
 
 
 const productManager = new ProductManager();
 const cartManager = new CartsManager();
 const router = Router();
 
-router.get("/products", async (req, res) => {
-    if (!req.session.isLogged) {
-        return res.redirect("/singup")
-    }
+router.get("/products", privateRoutes, async (req, res) => {
+
     //----PERFIL----//
     const user = {
         first_name: req.session.first_name,
@@ -38,13 +37,13 @@ router.get("/products", async (req, res) => {
     res.render("home", {user: user, products: products.payload, prevLink: products.prevLink, nextLink: products.nextLink })
 });
 
-router.get("/cart", async (req, res) => {
+router.get("/cart", privateRoutes, async (req, res) => {
     const cart = await cartManager.getCartById("6515c211f4aa027b6c347624")
 
     res.render('cart', {cart})
 })
 
-router.get("/chat", (req, res) => {
+router.get("/chat", privateRoutes, (req, res) => {
     req.context.socketServer.on("connection", (socket) => {
         console.log("se conecto", socket.id)
     })

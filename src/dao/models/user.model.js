@@ -9,7 +9,6 @@ const usersSchema = new mongoose.Schema({
     },
     last_name: {
         type:String,
-        required: true
     },
     age: {
         type:Number,
@@ -21,11 +20,9 @@ const usersSchema = new mongoose.Schema({
     },
     password: {
         type:String,
-        required: true
     },
     rol:{
         type:String,
-        required:true
     }
 });
 

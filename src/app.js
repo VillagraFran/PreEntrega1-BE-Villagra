@@ -9,12 +9,15 @@ import mongoose from "mongoose";
 import { messageModel } from "./dao/models/message.model.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import initializePassport from "./config/passport.config.js";
+import passport from "passport";
 
 mongoose.connect("mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority")
 
 const app = express()
 const httpServer = app.listen(8080, ()=>console.log("on"))
 const socketServer = new Server(httpServer)
+
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', './src/views');
@@ -45,6 +48,10 @@ app.use('/api', usersRouter);
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartsRouter);
+
+initializePassport();
+app.use(passport.initialize())
+app.use(passport.session())
 
 socketServer.on("connection", (socket) => {
     socket.on("message", async (data) => {
