@@ -60,3 +60,9 @@ socket.on('new-message', (data) => {
   
     content.innerHTML = messages.join('');
 });
+
+const btnCart = document.getElementById("btn-cart")
+
+btnCart.addEventListener('click', () => {
+    
+})

@@ -30,7 +30,8 @@ const initializePassport = () => {
                         age,
                         email: username,
                         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
-                        rol
+                        rol,
+                        cart,
                     });
 
                     return done(null, user);

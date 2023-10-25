@@ -17,6 +17,7 @@ router.get("/products", privateRoutes, async (req, res) => {
         last_name: req.session.last_name,
         email: req.session.email,
         rol: req.session.rol === "admin" ?? false,
+        cart: req.session.cart,
     }
 
     //----PRODUCTOS----//
@@ -38,9 +39,9 @@ router.get("/products", privateRoutes, async (req, res) => {
 });
 
 router.get("/cart", privateRoutes, async (req, res) => {
-    const cart = await cartManager.getCartById("6515c211f4aa027b6c347624")
+    const cart = await cartManager.getCartById(req.session.cart)
 
-    res.render('cart', {cart})
+    res.render('cart', {cart: cart.products})
 })
 
 router.get("/chat", privateRoutes, (req, res) => {

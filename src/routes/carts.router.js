@@ -15,7 +15,7 @@ router.get("/:cid", async (req, res) => {
 })
 
 router.post("/", async(req, res) => {
-    const cart ={ products: [] }
+    const cart ={ owner: req.session.cart, products: [] }
     const newCart = await cartsManager.createCart(cart)
     res.send({message: "carrito creado", id: newCart})
 })
@@ -23,8 +23,9 @@ router.post("/", async(req, res) => {
 router.post("/:cid/product/:pid", async(req, res) => {
     const cid = req.params.cid
     const pid = req.params.pid
+    const owner = req.session.cart
 
-    const addProduct =await cartsManager.addProduct(cid, pid)
+    const addProduct =await cartsManager.addProduct(cid, pid, owner)
 
     res.send(addProduct)
 })

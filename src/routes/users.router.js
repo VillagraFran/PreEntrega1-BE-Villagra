@@ -11,6 +11,7 @@ router.post('/login',
         req.session.last_name = req.user.last_name;
         req.session.email = req.user.email;
         req.session.rol = req.user.rol;
+        req.session.cart = req.user.cart;
         req.session.isLogged = true;
 
         res.redirect("/products")
@@ -44,7 +45,9 @@ router.get('/githubcallback',
     async (req, res) => {
         req.session.first_name = req.user.first_name
         req.session.last_name = req.user.last_name
+        req.session.email = req.user.email;
         req.session.rol = req.user.rol
+        req.session.cart = req.user.cart;
         req.session.isLogged = true
 
         res.redirect("/products")

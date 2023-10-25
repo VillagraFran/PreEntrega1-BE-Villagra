@@ -7,7 +7,7 @@ class cartManager {
     }
 
     async getCartById(cid) {
-        const carts = await cartModel.findOne({_id: cid}).populate('products.product').lean();
+        const carts = await cartModel.findOne({owner: cid}).populate('products.product').lean();
         return carts;
     }
 
@@ -16,8 +16,23 @@ class cartManager {
         return newCart.id;
     }
 
-    async addProduct(cid, pid) {
-        const cart = await cartModel.findOne({"_id": cid})
+    async addProduct(cid, pid, owner) {
+        const cart = await cartModel.findOne({"owner": owner})
+
+        if (!cart) {
+            const newCart = {
+                owner: owner,
+                products: [
+                    {
+                        product: pid,
+                        quantity: 1
+                    },
+                ]
+            }
+
+            await cartModel.create(newCart)
+            return(newCart)
+        }
 
         const product = cart.products.find(({ product }) => product.toString() === pid)
 
