@@ -1,7 +1,7 @@
-import { productModel } from "../models/product.model.js";
+import { productModel } from "../dao/db/models/product.model.js";
 
-class productManager {
-    async createProduct(title, description, price, thumbnail, code, stock, category) {
+class productService {
+    async createProductService(title, description, price, thumbnail, code, stock, category) {
         const product = await productModel.create({
             title,
             description,
@@ -16,7 +16,7 @@ class productManager {
         return product;
     }
 
-    async getProducts(limit, page, query, sort) {
+    async getProductsService(limit, page, query, sort) {
 
         const products = await productModel.paginate(query, { 
             page: page,
@@ -41,10 +41,10 @@ class productManager {
         return pageProducts;
     }
 
-    async deleteProduct(pid) {
+    async deleteProductService(pid) {
         const products = await productModel.deleteOne({_id:pid})
         return products;
     }
 }
 
-export default productManager;
+export default productService;

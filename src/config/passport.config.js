@@ -1,8 +1,10 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import GitHubStrategy from 'passport-github2';
-import { userModel } from '../dao/models/user.model.js';
+import { userModel } from '../dao/db/models/user.model.js';
 import bcrypt from 'bcrypt';
+import { config }from "dotenv";
+config()
 
 const initializePassport = () => {
     passport.use(
@@ -20,7 +22,7 @@ const initializePassport = () => {
                         return done(null, false);
                     }
 
-                    if (username === "adminCoder@coder.com") {
+                    if (username === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
                         rol = "admin";
                     }
 

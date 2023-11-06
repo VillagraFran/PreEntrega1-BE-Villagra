@@ -1,22 +1,22 @@
-import { cartModel } from "../models/cart.model.js";
+import { cartModel } from "../dao/db/models/cart.model.js";
 
-class cartManager {
-    async getCarts() {
+class cartService {
+    async getCartsService() {
         const carts = await cartModel.find().lean();
         return carts;
     }
 
-    async getCartById(cid) {
+    async getCartByIdService(cid) {
         const carts = await cartModel.findOne({owner: cid}).populate('products.product').lean();
         return carts;
     }
 
-    async createCart(cart) {
+    async createCartService(cart) {
         const newCart = await cartModel.create(cart)
-        return newCart.id;
+        return newCart;
     }
 
-    async addProduct(cid, pid, owner) {
+    async addProductService(cid, pid, owner) {
         const cart = await cartModel.findOne({"owner": owner})
 
         if (!cart) {
@@ -51,7 +51,7 @@ class cartManager {
         return cart;
     }
 
-    async modifyCart(cid) {
+    async modifyCartService(cid) {
         const cart = await cartModel.findOne({"_id": cid})
 
         cart.products = []
@@ -60,7 +60,7 @@ class cartManager {
         return cart.products;
     }
 
-    async modifyProduct(cid, pid, quantity) {
+    async modifyProductService(cid, pid, quantity) {
         const cart = await cartModel.findOne({"_id": cid})
 
         const product = cart.products.findIndex(({ product }) => product.toString() === pid)
@@ -75,13 +75,13 @@ class cartManager {
         return cart.products[product];
     }
 
-    async deleteCart(cid) {
+    async deleteCartService(cid) {
         await cartModel.deleteOne({_id:cid})
         
         return({message: "carrito eliminado"})
     }
 
-    async deleteProduct(cid, pid) {
+    async deleteProductService(cid, pid) {
         const cart = await cartModel.findOne({"_id": cid})
 
         const product = cart.products.findIndex(({ product }) => product.toString() === pid)
@@ -97,4 +97,4 @@ class cartManager {
     }
 }
 
-export default cartManager;
+export default cartService;

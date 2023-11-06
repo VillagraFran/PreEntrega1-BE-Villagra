@@ -1,18 +1,24 @@
-import express from "express"
-import handlebars from "express-handlebars"
+import express from "express";
+import handlebars from "express-handlebars";
 import { Server } from "socket.io";
-import cartsRouter from "./routes/carts.router.js"
-import viewsRouter from "./routes/viewsRouter.js"
-import productRouter from "./routes/product.router.js"
-import usersRouter from "./routes/users.router.js"
+
+import cartsRouter from "./routes/carts.router.js";
+import viewsRouter from "./routes/viewsRouter.js";
+import productRouter from "./routes/product.router.js";
+import usersRouter from "./routes/users.router.js";
+
 import mongoose from "mongoose";
-import { messageModel } from "./dao/models/message.model.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.config.js";
 import passport from "passport";
 
-mongoose.connect("mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority")
+import { messageModel } from "./dao/db/models/message.model.js";
+
+import { config }from "dotenv";
+config()
+
+mongoose.connect(process.env.MONGO_ATLAS_URL)
 
 const app = express()
 const httpServer = app.listen(8080, ()=>console.log("on"))
