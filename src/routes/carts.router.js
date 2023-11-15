@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import CartsManager from "../controllers/cartManager.js";
+import privateRoutes from '../middlewares/privateRoutes.js';
 
 const cartsManager = new CartsManager();
 const router = Router()
@@ -15,17 +16,16 @@ router.get("/:cid", async (req, res) => {
 })
 
 router.post("/", async(req, res) => {
-    const cart ={ owner: req.session.cart, products: [] }
+    const cart ={ products: [] }
     const newCart = await cartsManager.createCart(cart)
-    res.send({message: "carrito creado", id: newCart})
+    res.send({message: "carrito creado", id: newCart._id})
 })
 
 router.post("/:cid/product/:pid", async(req, res) => {
     const cid = req.params.cid
     const pid = req.params.pid
-    const owner = req.session.cart
 
-    const addProduct =await cartsManager.addProduct(cid, pid, owner)
+    const addProduct =await cartsManager.addProduct(cid, pid)
 
     res.send(addProduct)
 })
@@ -59,6 +59,13 @@ router.delete("/:cid/product/:pid", async(req, res) => {
     const deleteProduct =await cartsManager.deleteProduct(cid, pid)
 
     res.send(deleteProduct)
+})
+
+router.post("/:cid/purchase", async(req, res) => {
+    const cid = req.params.cid
+    const purchase = await cartsManager.purchase(cid)
+
+    res.send(purchase)
 })
 
 export default router;

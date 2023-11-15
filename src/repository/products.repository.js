@@ -1,7 +1,7 @@
 import { productModel } from "../dao/db/models/product.model.js";
 
-class productService {
-    async createProductService(title, description, price, thumbnail, code, stock, category) {
+class productRepository {
+    async createProductRepository(title, description, price, thumbnail, code, stock, category) {
         const product = await productModel.create({
             title,
             description,
@@ -16,7 +16,7 @@ class productService {
         return product;
     }
 
-    async getProductsService(limit, page, query, sort) {
+    async getProductsRepository(limit, page, query, sort) {
 
         const products = await productModel.paginate(query, { 
             page: page,
@@ -25,7 +25,7 @@ class productService {
             lean: true
         })
 
-        const pageProducts = {
+        const pageDTO = {
             status: "success",
             payload: products.docs,
             totalPages: products.totalPages,
@@ -38,13 +38,13 @@ class productService {
             nextLink: products.hasNextPage ? `http://localhost:8080/products/?page=${products.nextPage}` : ''
         }
 
-        return pageProducts;
+        return pageDTO;
     }
 
-    async deleteProductService(pid) {
+    async deleteProductRepository(pid) {
         const products = await productModel.deleteOne({_id:pid})
         return products;
     }
 }
 
-export default productService;
+export default productRepository;

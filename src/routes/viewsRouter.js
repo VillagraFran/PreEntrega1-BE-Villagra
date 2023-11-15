@@ -12,13 +12,7 @@ const router = Router();
 router.get("/products", privateRoutes, async (req, res) => {
 
     //----PERFIL----//
-    const user = {
-        first_name: req.session.first_name,
-        last_name: req.session.last_name,
-        email: req.session.email,
-        rol: req.session.rol === "admin" ?? false,
-        cart: req.session.cart,
-    }
+    const user = req.user
 
     //----PRODUCTOS----//
     const {limit, page, query, sort} = req.query;
@@ -35,11 +29,11 @@ router.get("/products", privateRoutes, async (req, res) => {
 
     const products = await productManager.getProducts(limitModel, pageModel, queryModel, sortModel)
 
-    res.render("home", {user: user, products: products.payload, prevLink: products.prevLink, nextLink: products.nextLink })
+    res.render("home", {user: user, cartId: JSON.stringify(user.cart._id), products: products.payload, prevLink: products.prevLink, nextLink: products.nextLink })
 });
 
 router.get("/cart", privateRoutes, async (req, res) => {
-    const cart = await cartManager.getCartById(req.session.cart)
+    const cart = req.user.cart;
 
     res.render('cart', {cart: cart.products})
 })

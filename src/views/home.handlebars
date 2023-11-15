@@ -59,15 +59,15 @@
                 <h2>{{this.title}}</h2>
                 <p class="card-text">{{this.description}}</p>
                 <p>${{this.price}}</p>
-                <button
-                    action="http://localhost:8080/api/carts/{{user.cart}}/product/{{this._id}}"
+                <a
+                    action="http://localhost:8080/api/carts/{{cartId}}/product/{{this._id}}"
                     method="post"
-                    enctype="multipart/form-data"
                     class="btn btn-success"
                     id="btn-cart"
+                    type="button"
                 >
                     Añadir al Carrito
-                </button>
+                </a>
             </div>
         </div>
     {{/each}}

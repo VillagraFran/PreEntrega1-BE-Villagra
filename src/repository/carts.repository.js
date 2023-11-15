@@ -1,23 +1,25 @@
 import { cartModel } from "../dao/db/models/cart.model.js";
+import { ticketModel } from "../dao/db/models/ticket.model.js";
+import { userModel } from "../dao/db/models/user.model.js";
 
-class cartService {
-    async getCartsService() {
+class cartRepository {
+    async getCartsRepository() {
         const carts = await cartModel.find().lean();
         return carts;
     }
 
-    async getCartByIdService(cid) {
-        const carts = await cartModel.findOne({owner: cid}).populate('products.product').lean();
+    async getCartByIdRepository(cid) {
+        const carts = await cartModel.findById(cid).populate('products.product').lean();
         return carts;
     }
 
-    async createCartService(cart) {
+    async createCartRepository(cart) {
         const newCart = await cartModel.create(cart)
         return newCart;
     }
 
-    async addProductService(cid, pid, owner) {
-        const cart = await cartModel.findOne({"owner": owner})
+    async addProductRepository(cid, pid) {
+        const cart = await cartModel.findById(cid)
 
         if (!cart) {
             const newCart = {
@@ -51,7 +53,7 @@ class cartService {
         return cart;
     }
 
-    async modifyCartService(cid) {
+    async modifyCartRepository(cid) {
         const cart = await cartModel.findOne({"_id": cid})
 
         cart.products = []
@@ -60,7 +62,7 @@ class cartService {
         return cart.products;
     }
 
-    async modifyProductService(cid, pid, quantity) {
+    async modifyProductRepository(cid, pid, quantity) {
         const cart = await cartModel.findOne({"_id": cid})
 
         const product = cart.products.findIndex(({ product }) => product.toString() === pid)
@@ -75,13 +77,13 @@ class cartService {
         return cart.products[product];
     }
 
-    async deleteCartService(cid) {
+    async deleteCartRepository(cid) {
         await cartModel.deleteOne({_id:cid})
         
         return({message: "carrito eliminado"})
     }
 
-    async deleteProductService(cid, pid) {
+    async deleteProductRepository(cid, pid) {
         const cart = await cartModel.findOne({"_id": cid})
 
         const product = cart.products.findIndex(({ product }) => product.toString() === pid)
@@ -95,6 +97,44 @@ class cartService {
         await cart.save();
         return cart.products;
     }
+
+    async purchaseRepository(cid) {
+        const cart = await cartModel.findOne({"_id": cid}).populate('products.product')
+        const buyed = []
+
+        cart.products.filter((pr) => {
+            if (pr.quantity > pr.product.stock) {
+                return pr;
+            } else {
+                buyed.push({
+                    quantity: pr.quantity,
+                    amount: pr.product.price
+                })
+                const pid = cart.products.findIndex((product) => product.product._id === pr.product._id)
+                cart.products.splice(pid, 1)
+            }
+        })
+        await cart.save()
+
+        const amount = buyed.reduce((acc, item) => {
+            return acc + (item.quantity * item.amount);
+        }, 0);
+
+        const fechaActual = new Date();
+        const day = fechaActual.getDate();
+        const month = fechaActual.getMonth() + 1;
+        const year = fechaActual.getFullYear();
+
+        const purchaser = await userModel.findOne({"cart": cid})
+
+        const ticket = await ticketModel.create({
+            purchase_datetime: day +"/"+ month +"/"+ year,
+            amount: amount,
+            purchaser: purchaser.email
+        })
+
+        return ticket;
+    }
 }
 
-export default cartService;
+export default cartRepository;

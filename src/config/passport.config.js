@@ -2,9 +2,28 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import GitHubStrategy from 'passport-github2';
 import { userModel } from '../dao/db/models/user.model.js';
+import CartManager from '../controllers/cartManager.js';
 import bcrypt from 'bcrypt';
+import jwt from "passport-jwt";
+
 import { config }from "dotenv";
 config()
+
+const cartManager = new CartManager();
+
+const JwtStrategy = jwt.Strategy;
+const extractJwt = jwt.ExtractJwt;
+
+const cookieExtractor = (req) => {
+    let token = null;
+
+    if (req && req.cookies) {
+      token = req.cookies['token'];
+    }
+  
+    return token;
+};
+
 
 const initializePassport = () => {
     passport.use(
@@ -26,6 +45,9 @@ const initializePassport = () => {
                         rol = "admin";
                     }
 
+                    const cart ={ products: [] }
+                    const userCart = await cartManager.createCart(cart)
+
                     const user = await userModel.create({
                         first_name,
                         last_name,
@@ -33,7 +55,7 @@ const initializePassport = () => {
                         email: username,
                         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
                         rol,
-                        cart,
+                        cart: userCart._id,
                     });
 
                     return done(null, user);
@@ -98,6 +120,22 @@ const initializePassport = () => {
 
             }
         )
+    )
+        
+    passport.use(
+        'jwt', 
+        new JwtStrategy(
+        {
+            jwtFromRequest: extractJwt.fromExtractors([cookieExtractor]),
+            secretOrKey: process.env.JWT_SECRET,
+        },
+        async(jwt_payload, done)=>{
+            try {
+                done(null, jwt_payload)
+            } catch (error) {
+                done(error)
+            }
+        })
     )
 
     passport.serializeUser((user, done) => {

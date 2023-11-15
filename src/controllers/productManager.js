@@ -1,34 +1,34 @@
-import ProductService from "../services/products.service.js";
+import ProductRepository from "../repository/products.repository.js";
 
-const productService = new ProductService();
+const productRepository = new ProductRepository();
 
 class productManager {
     async createProduct(title, description, price, thumbnail, code, stock, category) {
         try {
-            const newProduct = await productService.createProductService(title, description, price, thumbnail, code, stock, category)
+            const newProduct = await productRepository.createProductRepository(title, description, price, thumbnail, code, stock, category)
             return newProduct;
         } catch (error) {
-            console.log("service-error:", error)
+            console.log("Repository-error:", error)
             throw error;
         }
     }
 
     async getProducts(limit, page, query, sort) {
         try {
-            const products = await productService.getProductsService(limit, page, query, sort)
+            const products = await productRepository.getProductsRepository(limit, page, query, sort)
             return products;
         } catch (error) {
-            console.log("service-error:", error)
+            console.log("Repository-error:", error)
             throw error;
         }
     }
 
     async deleteProduct(pid) {
         try {
-            const deleteProduct = await productService.deleteProductService(pid)
+            const deleteProduct = await productRepository.deleteProductRepository(pid)
             return deleteProduct;
         } catch (error) {
-            console.log("service-error:", error)
+            console.log("Repository-error:", error)
             throw error;
         }
     }

@@ -12,6 +12,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.config.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 import { messageModel } from "./dao/db/models/message.model.js";
 
@@ -24,24 +25,25 @@ const app = express()
 const httpServer = app.listen(8080, ()=>console.log("on"))
 const socketServer = new Server(httpServer)
 
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
+app.use(cookieParser())
 app.engine('handlebars', handlebars.engine());
 app.set('views', './src/views');
 app.set('view engine', 'handlebars');
 app.use("/static", express.static('./public'));
-
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
 
 app.use((req, res, next) => {
     req.context = { socketServer }
     next()
 });
 
+
 app.use(
     session({
         store: MongoStore.create({
-            mongoUrl:"mongodb+srv://villafran55:u4NpBxuLwdj6i6NL@cluster0.zydycch.mongodb.net/?retryWrites=true&w=majority",
+            mongoUrl: process.env.MONGO_ATLAS_URL,
             ttl: 100
         }),
         secret:"jksajskajska",
@@ -57,7 +59,6 @@ app.use('/api/carts', cartsRouter);
 
 initializePassport();
 app.use(passport.initialize())
-app.use(passport.session())
 
 socketServer.on("connection", (socket) => {
     socket.on("message", async (data) => {
