@@ -12,7 +12,7 @@ const usersSchema = new mongoose.Schema({
       require: true,
     },
     password: String,
-    role: String,
+    rol: String,
     cart: {
       type: String,
       ref: 'carts',

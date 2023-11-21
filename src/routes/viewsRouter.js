@@ -14,6 +14,10 @@ router.get("/products", privateRoutes, async (req, res) => {
     //----PERFIL----//
     const user = req.user
 
+    if (user.rol === "usuario") {
+        user.rol = undefined
+    }
+
     //----PRODUCTOS----//
     const {limit, page, query, sort} = req.query;
 

@@ -59,15 +59,21 @@
                 <h2>{{this.title}}</h2>
                 <p class="card-text">{{this.description}}</p>
                 <p>${{this.price}}</p>
-                <a
-                    action="http://localhost:8080/api/carts/{{cartId}}/product/{{this._id}}"
-                    method="post"
-                    class="btn btn-success"
-                    id="btn-cart"
-                    type="button"
-                >
-                    Añadir al Carrito
-                </a>
+                {{#if user.rol}}
+                    <div>
+                        <p>tu rol no te permite comprar</p>
+                    </div>
+                {{else}}
+                    <a
+                        action="http://localhost:8080/api/carts/{{cartId}}/product/{{this._id}}"
+                        method="post"
+                        class="btn btn-success"
+                        id="btn-cart"
+                        type="button"
+                    >
+                        Añadir al Carrito
+                    </a>
+                {{/if}}
             </div>
         </div>
     {{/each}}

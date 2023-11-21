@@ -6,6 +6,10 @@ import CartManager from '../controllers/cartManager.js';
 import bcrypt from 'bcrypt';
 import jwt from "passport-jwt";
 
+import customError from './errors/customError.js';
+import EError from './errors/enums.js';
+import { registerErrorDataInfo, loginErrorDataInfo } from './errors/info.js';
+
 import { config }from "dotenv";
 config()
 
@@ -38,7 +42,12 @@ const initializePassport = () => {
                     const findUser = await userModel.findOne({ email: username });
 
                     if (findUser) {
-                        return done(null, false);
+                        customError.createError({
+                            name: "register error",
+                            cause: registerErrorDataInfo({username, first_name, last_name, age}),
+                            message: "error creating user",
+                            code: EError.INVALID_DATA_ERROR
+                        })
                     }
 
                     if (username === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
@@ -73,12 +82,13 @@ const initializePassport = () => {
             async (username, password, done) => {
                 const user = await userModel.findOne({ email: username });
 
-                if (!user) {
-                    return done(null, false);
-                }
-
-                if (!bcrypt.compareSync(password, user.password)) {
-                    return done(null, false);
+                if (!user || !bcrypt.compareSync(password, user.password)) {
+                    customError.createError({
+                        name: "login error",
+                        cause: loginErrorDataInfo({username}),
+                        message: "error finding user",
+                        code: EError.INVALID_DATA_ERROR
+                    })
                 }
 
                 done(null, user);
@@ -103,6 +113,9 @@ const initializePassport = () => {
                     if (user) {
                         return done(null, user);
                     } else {
+                        const cart ={ products: [] }
+                        const userCart = await cartManager.createCart(cart)
+
                         const createUser = userModel.create({
                             first_name: profile.username,
                             last_name:'',
@@ -110,6 +123,7 @@ const initializePassport = () => {
                             email: email,
                             password: '',
                             rol: 'usuario',
+                            cart: userCart._id
                         });
     
                         return done(null, createUser);

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { uploader } from '../middlewares/multer.js';
 import ProductManager from '../controllers/productManager.js';
+import fakeProduct from '../services/mocking.service.js';
 
 const productManager = new ProductManager();
 const router = Router()
@@ -41,6 +42,12 @@ router.delete('/:pid', async (req, res) => {
     const {pid} = req.params;
     const deleteProduct =await productManager.deleteProduct(pid)
     res.send({status:"succes", payload: deleteProduct})
+})
+
+// FAKER //
+
+router.get('/mockingproducts', (req, res) => {
+    res.send(fakeProduct)
 })
 
 export default router;

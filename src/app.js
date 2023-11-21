@@ -16,6 +16,8 @@ import cookieParser from "cookie-parser";
 
 import { messageModel } from "./dao/db/models/message.model.js";
 
+import { errorHandler } from "./middlewares/errors.js";
+
 import { config }from "dotenv";
 config()
 
@@ -56,6 +58,7 @@ app.use('/api', usersRouter);
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartsRouter);
+app.use(errorHandler)
 
 initializePassport();
 app.use(passport.initialize())
