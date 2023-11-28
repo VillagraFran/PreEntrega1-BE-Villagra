@@ -8,7 +8,6 @@ class productManager {
             const newProduct = await productRepository.createProductRepository(title, description, price, thumbnail, code, stock, category)
             return newProduct;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -18,7 +17,6 @@ class productManager {
             const products = await productRepository.getProductsRepository(limit, page, query, sort)
             return products;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -28,7 +26,6 @@ class productManager {
             const deleteProduct = await productRepository.deleteProductRepository(pid)
             return deleteProduct;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }

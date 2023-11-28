@@ -3,6 +3,7 @@ import ProductManager from '../controllers/productManager.js';
 import CartsManager from "../controllers/cartManager.js";
 import publicRoutes from "../middlewares/publicRoutes.js";
 import privateRoutes from "../middlewares/privateRoutes.js";
+import logger from "../middlewares/logger.js";
 
 
 const productManager = new ProductManager();
@@ -44,7 +45,7 @@ router.get("/cart", privateRoutes, async (req, res) => {
 
 router.get("/chat", privateRoutes, (req, res) => {
     req.context.socketServer.on("connection", (socket) => {
-        console.log("se conecto", socket.id)
+        logger.info("se conecto" + socket.id)
     })
     res.render("chat", {})
 });

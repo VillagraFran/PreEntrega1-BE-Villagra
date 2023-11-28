@@ -9,7 +9,6 @@ class cartManager {
             const carts = await cartRepository.getCartsRepository();
             return carts;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -19,7 +18,6 @@ class cartManager {
             const cart = await cartRepository.getCartByIdRepository(cid)
             return cart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -29,7 +27,6 @@ class cartManager {
             const newCart = await cartRepository.createCartRepository(cart)
             return newCart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }    
@@ -39,7 +36,6 @@ class cartManager {
             const cart = await cartRepository.addProductRepository(cid, pid)
             return cart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -49,7 +45,6 @@ class cartManager {
             const cart = await cartRepository.modifyCartRepository(cid)
             return cart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -59,7 +54,6 @@ class cartManager {
             const modifyCart = await cartRepository.modifyProductRepository(cid, pid, quantity)
             return modifyCart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -69,7 +63,6 @@ class cartManager {
             const deleteCart = await cartRepository.deleteCartRepository(cid)
             return deleteCart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }
@@ -79,7 +72,6 @@ class cartManager {
             const cart = await cartRepository.deleteProductRepository(cid, pid)
             return cart;
         } catch (error) {
-            console.log("Repository-error:", error)
             throw error;
         }
     }

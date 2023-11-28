@@ -6,6 +6,7 @@ import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/viewsRouter.js";
 import productRouter from "./routes/product.router.js";
 import usersRouter from "./routes/users.router.js";
+import loggerRouter from "./routes/logger.router.js"
 
 import mongoose from "mongoose";
 import session from "express-session";
@@ -58,6 +59,7 @@ app.use('/api', usersRouter);
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/', loggerRouter)
 app.use(errorHandler)
 
 initializePassport();

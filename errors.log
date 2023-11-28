@@ -1,0 +1,6 @@
+error: POST en /api/singup:Some of the information provided is incomplete or invalid.
+        Recibed data:
+        -first_name: Fran
+        -last_name: Villagra
+        -age: 19
+        -email: ejemplo@gmail.com
