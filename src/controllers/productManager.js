@@ -21,10 +21,24 @@ class productManager {
         }
     }
 
+    async getProductsById(pid) {
+        try {
+            const product = await productRepository.getProductsByIdRepository(pid);
+            if (product.owner !== owner) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteProduct(pid) {
         try {
             const deleteProduct = await productRepository.deleteProductRepository(pid)
             return deleteProduct;
+            
         } catch (error) {
             throw error;
         }

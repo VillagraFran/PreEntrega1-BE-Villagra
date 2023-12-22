@@ -26,13 +26,14 @@ router.get("/", async (req, res) => {
 
 router.post('/', uploader.single('file'), async (req, res) => {
     const { title, description, price, code, stock, category } = req.body;
-    const thumbnail = req.file.originalname;
+    const thumbnail = "img";
+    const {owner} = req.body;
 
-    if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+    if (!title || !description || !price || !thumbnail || !stock || !category|| !owner) {
         return res.status(400).json({ error: "complete todos los campos" });
     }
 
-    const product = await productManager.createProduct(title, description, price,thumbnail, code, stock, category)
+    const product = await productManager.createProduct(title, description, price,thumbnail, code, stock, category, owner)
 
     req.context.socketServer.emit('new-product', product)
     res.status(200).send(product)

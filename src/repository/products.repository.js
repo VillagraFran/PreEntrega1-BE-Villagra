@@ -41,8 +41,13 @@ class productRepository {
         return pageDTO;
     }
 
+    async getProductsByIdRepository (pid) {
+        const product = await productModel.findById(pid);
+        return product;
+    }
+
     async deleteProductRepository(pid) {
-        const products = await productModel.deleteOne({_id:pid})
+        const products = await productModel.deleteOne({code: pid})
         return products;
     }
 }
