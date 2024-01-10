@@ -1,0 +1,73 @@
+paths:
+  /api/user/login:
+    post:
+      summary: obtiene un usuario y le genera un JWT
+      tags:
+        - Users
+      responses:
+        "200":
+          description: devuelve el usuario correspondiente
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/User"
+        "500":
+          description: devuelve un customError
+  /api/user/singup:
+    post:
+      summary: crea un nuevo usuario
+      tags:
+        - Users
+      responses:
+        "200":
+          description: crea de manera exitosa un nuevo usuario
+        "500":
+          description: devuelve un customError
+  /api/user/logout:
+    post:
+      summary: cierra la session del usuario
+      tags:
+        - Users
+      responses:
+        "200":
+          description: elimina la cookie de la session
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        first_name: 
+          type: String
+          description: nombre del usuario
+        last_name:
+          type: String
+          description: apellido del usuario
+        age:
+          type: Number
+          description: edad del usuario
+        email:
+          type: String
+          description: email del usuario
+        password:
+          type: String
+          description: contraseña hasheada del usuario
+        rol:
+          type: String
+          description: rol de privilegios del usuario
+        cart:
+          type: String
+          description: carrito arraigado al usuario
+      example:
+        _id: ObjectId("jkasfjhajfhgejfhsdakfjkdafheilw")
+        first_name: Francisco
+        last_name: Villagra
+        age: 19
+        email: ejemplo@email.com
+        password: $2b$10$s3X1vDypWkFXVxTRGVagWeQS4E6WI.ErdY8VAKKsRB3x/JlMkE7z6
+        rol: premium
+        cart: 655ced9611e4908ac6956fdsf64

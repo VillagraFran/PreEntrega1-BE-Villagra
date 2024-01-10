@@ -1,8 +1,14 @@
 import { Router } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import bcrypt, { genSaltSync } from "bcrypt"
+
+import { userModel } from '../DAO/mongo/models/user.model.js';
+
 import { config } from 'dotenv';
 config();
+
+import privateRoutes from '../middlewares/privateRoutes.js';
 
 
 const router = Router();
@@ -23,11 +29,15 @@ router.post('/login',
 router.post('/singup', 
     passport.authenticate("register", {failureRedirect: "/fail" }), 
     async (req, res) => {
-        res.redirect("/login")
+        res.redirect("/login");
     }
-)
+);
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async(req, res) => {
+    const user= await userModel.findOne({"_id":req.user._id});
+    const date= new Date();
+    user.last_conection= `${date}`;
+    await user.save();
     res.clearCookie('token');
     res.redirect("/login");
 });
@@ -48,8 +58,31 @@ router.get('/githubcallback',
 router.get('/current',
     passport.authenticate("jwt", { session: false }),
     async (req, res) => {
-        res.send(req.cookies);
+        res.redirect("/products");
     }
 );
+
+router.post('/recoverPassword', async(req, res) => {
+    const newPassword = req.body;
+    const newUser = await userModel.updateOne({email: {$eq: req.user.email}}, {$set: {password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10))}})
+    
+    res.status(200).send({message: "contraseña cambiada exitosamente"})
+});
+
+router.put('/premium/:uid', async(req,res) => {
+    try {
+        const {uid}= req.params;
+        const user=await userModel.findOne({"_id":uid})
+
+        if (user.rol === "usuario") {
+            user.rol="premium"
+            await user.save()
+        }
+
+        return res.send(user)
+    } catch (error) {
+        throw({error:"error"})
+    }  
+})
 
 export default router;

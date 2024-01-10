@@ -22,7 +22,8 @@ const productSchema = new mongoose.Schema({
     },
     code: {
         type:Number,
-        required: false
+        unique: true,
+        required: true
     },
     stock: {
         type:Number,
@@ -32,9 +33,9 @@ const productSchema = new mongoose.Schema({
         type:String,
         required: true
     },
-    owner:{
+    owner: {
         type:String,
-        require: true
+        required: true
     }
 });
 

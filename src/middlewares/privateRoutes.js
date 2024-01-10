@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
-import { userModel } from "../dao/db/models/user.model.js";
-import { userDTO } from "../dto/userDTO.js";
+import { userModel } from "../DAO/mongo/models/user.model.js";
+import { userDTO } from "../DTO/userDTO.js";
+import { config } from "dotenv";
+config()
 
 const privateRoutes = (req, res, next) => {
     const token = req.cookies.token;

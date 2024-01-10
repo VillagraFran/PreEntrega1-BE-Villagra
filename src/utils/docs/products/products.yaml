@@ -1,0 +1,76 @@
+paths:
+  /api/products:
+    get:
+      summary: obtiene la informacion de todos los productos paginados
+      tags:
+        - Products
+      responses:
+        "200":
+          description: se crea exitosamente el producto
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: devuelve un error
+  /api/products/{pid}:
+    get:
+      summary: obtiene la informacion de un producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: se obtiene exitosamente el producto
+          content:
+            aplication/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Product"
+        "500":
+          description: devuelve un error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id autogenerado de mongo
+        title: 
+          type: String
+          description: nombre del producto
+        description:
+          type: String
+          description: descripcion del producto
+        price:
+          type: Number
+          description: precio del producto
+        thumbnail:
+          type: String
+          description: imagen del producto
+        code:
+          type: Number
+          description: numero del producto
+        stock:
+          type: Number
+          description: cantidad disponible del producto
+        category:
+          type: String
+          description: categoria del producto
+        owner:
+          type: String
+          description: persona que vende el producto
+      example:
+        _id: ObjectId("hjasfhuewhfdjabhfjd")
+        title: gorra
+        description: se usa en la cabeza
+        price: 1000
+        thumbnail: img.png
+        code: 1
+        stock: 30
+        category: gorras
+        owner: ejemplo@email.com
+        

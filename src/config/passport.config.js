@@ -1,19 +1,20 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import GitHubStrategy from 'passport-github2';
-import { userModel } from '../dao/db/models/user.model.js';
-import CartManager from '../controllers/cartManager.js';
 import bcrypt from 'bcrypt';
 import jwt from "passport-jwt";
 
+import { userModel } from '../DAO/mongo/models/user.model.js';
+import { createCart } from '../controllers/cart.manager.js';
+
 import customError from './errors/customError.js';
-import EError from './errors/enums.js';
+import EError from './errors/enumns.js';
 import { registerErrorDataInfo, loginErrorDataInfo } from './errors/info.js';
 
-import { config }from "dotenv";
+import { config } from "dotenv";
 config()
 
-const cartManager = new CartManager();
+
 
 const JwtStrategy = jwt.Strategy;
 const extractJwt = jwt.ExtractJwt;
@@ -27,7 +28,6 @@ const cookieExtractor = (req) => {
   
     return token;
 };
-
 
 const initializePassport = () => {
     passport.use(
@@ -54,8 +54,7 @@ const initializePassport = () => {
                         rol = "admin";
                     }
 
-                    const cart ={ products: [] }
-                    const userCart = await cartManager.createCart(cart)
+                    const userCart = await createCart();
 
                     const user = await userModel.create({
                         first_name,
@@ -65,6 +64,7 @@ const initializePassport = () => {
                         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
                         rol,
                         cart: userCart._id,
+                        last_conection: "no conected"
                     });
 
                     return done(null, user);
@@ -90,6 +90,9 @@ const initializePassport = () => {
                         code: EError.INVALID_DATA_ERROR
                     })
                 }
+
+                user.last_conection = "online"
+                await user.save()
 
                 done(null, user);
             }
