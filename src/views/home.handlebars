@@ -2,20 +2,20 @@
   <div class="container-fluid">
     <a class="navbar-brand">¡Te damos la bienvenida {{user.first_name}} {{user.last_name}}! </a>
     {{#unless user.rol}}
-        <form action="http://localhost:8080/api/premium/{{user.email}}" method="post">
+        <form action="https://ecomerce-villagra.onrender.com/api/premium/{{user.email}}" method="post">
             <button class="btn btn-outline-warning" type="submit">vuelvete premium</button>
         </form>
     {{/unless}}
     <form 
         class="d-flex"
-        action="http://localhost:8080/api/logout"
+        action="https://ecomerce-villagra.onrender.com/api/logout"
         method="post"
     >
         <button class="btn btn-outline-success" type="submit">
             Cerrar sesión
         </button>
 
-        <a class="btn" href="http://localhost:8080/cart">
+        <a class="btn" href="https://ecomerce-villagra.onrender.com/cart">
             Carrito
         </a>
     </form>
@@ -24,7 +24,7 @@
 
 {{#if user.rol}}
     <form 
-        action="http://localhost:8080/api/products/"
+        action="https://ecomerce-villagra.onrender.com/api/products/"
         method="post"
         enctype="multipart/form-data"
         class="text-start col-8"
@@ -59,20 +59,20 @@
 <div id="product-container" style="display: flex;">
     {{#each products}}
         <div class="card" style="width: 18rem;">
-            <img src="http://localhost:8080/static/products/{{this.thumbnail}}" class="card-img-top" style="height: 200px;">
+            <img src="https://ecomerce-villagra.onrender.com/static/products/{{this.thumbnail}}" class="card-img-top" style="height: 200px;">
             <div class="card-body">
                 <h2>{{this.title}}</h2>
                 <p class="card-text">{{this.description}}</p>
                 <p>${{this.price}}</p>
                     <form
-                        action="http://localhost:8080/api/carts/{{this.buyer}}/product/{{this._id}}"
+                        action="https://ecomerce-villagra.onrender.com/api/carts/{{this.buyer}}/product/{{this._id}}"
                         method="post"
                         id="btn-cart"
                     >
                         <button type="submit" value="submit" class="btn btn-success add-cart">subir al carrito</button>
                     </form>
                     {{#if this.buyer_rol}}
-                        <form action="http://localhost:8080/api/products/delete/{{this._id}}" method="post">
+                        <form action="https://ecomerce-villagra.onrender.com/api/products/delete/{{this._id}}" method="post">
                             <button class="btn btn-outline-danger" type="submit">Eliminar producto</button>
                         </form>
                     {{/if}}

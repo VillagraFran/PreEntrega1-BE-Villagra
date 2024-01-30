@@ -1,7 +1,7 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand"></a>
-        <a class="btn" href="http://localhost:8080/">
+        <a class="btn" href="https://ecomerce-villagra.onrender.com/">
             Volver al inicio
         </a>
   </div>
@@ -13,7 +13,7 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="http://localhost:8080/static/products/{{this.product.thumbnail}}" class="img-fluid rounded-start" alt="...">
+                        <img src="https://ecomerce-villagra.onrender.com/static/products/{{this.product.thumbnail}}" class="img-fluid rounded-start" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
@@ -23,7 +23,7 @@
                     </div>
                     <div>
                         <form 
-                            action="http://localhost:8080/api/carts/{{this.buyer}}/product/{{this.product._id}}" 
+                            action="https://ecomerce-villagra.onrender.com/api/carts/{{this.buyer}}/product/{{this.product._id}}" 
                             method="get"
                         >
                             <button type="submit" class="btn btn-danger">X</button>
@@ -33,7 +33,7 @@
             </div>
         {{/each}}
         <div>
-            <form action="http://localhost:8080/api/carts/{{cart._id}}/purchase" method="post">
+            <form action="https://ecomerce-villagra.onrender.com/api/carts/{{cart._id}}/purchase" method="post">
                 <button class="btn btn-success" type="submit">comprar</button>
             </form>
         </div>

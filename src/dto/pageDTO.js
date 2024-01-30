@@ -8,8 +8,8 @@ export const pageDTO = (products) => {
         page: products.page,
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
-        prevLink: products.hasPrevPage ? `http://localhost:8080/products/?page=${products.prevPage}` : '',
-        nextLink: products.hasNextPage ? `http://localhost:8080/products/?page=${products.nextPage}` : ''
+        prevLink: products.hasPrevPage ? `https://ecomerce-villagra.onrender.com/products/?page=${products.prevPage}` : '',
+        nextLink: products.hasNextPage ? `https://ecomerce-villagra.onrender.com/products/?page=${products.nextPage}` : ''
     };
 
     return pageDTO;

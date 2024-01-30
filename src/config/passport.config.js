@@ -106,7 +106,7 @@ const initializePassport = () => {
             {
                 clientID: 'Iv1.9ebde67251aaef22',
                 clientSecret: '63aa642124628e43d01a8355fad4c25e57ee620f',
-                callbackURL: 'http://localhost:8080/api/githubcallback',
+                callbackURL: 'https://ecomerce-villagra.onrender.com/api/githubcallback',
                 scope: ['user:email'],
             },
             async (accessToken, refreshToken, profile, done) => {
