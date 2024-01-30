@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { userModel } from "../DAO/mongo/models/user.model.js";
-import { userDTO } from "../DTO/userDTO.js";
+import { userDTO } from "../dto/userDTO.js";
 import { config } from "dotenv";
 config()
 

@@ -1,5 +1,5 @@
 import { productModel } from "../DAO/mongo/models/product.model.js";
-import { pageDTO } from "../DTO/pageDTO.js";
+import { pageDTO } from "../dto/pageDTO.js";
 
 class productRepository {
     async create(title, description, price, thumbnail, code, stock, category, owner) {
