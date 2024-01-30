@@ -6,9 +6,8 @@ import bcrypt, { genSaltSync } from "bcrypt"
 import { userModel } from '../DAO/mongo/models/user.model.js';
 
 import { config } from 'dotenv';
-config();
-
 import privateRoutes from '../middlewares/privateRoutes.js';
+config();
 
 
 const router = Router();
@@ -19,7 +18,7 @@ router.post('/login',
 
         const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.cookie("token", token, {
-            maxAge: 100000,
+            maxAge: 1000000,
             httpOnly: true
         })
         res.redirect("/api/current")
@@ -33,8 +32,8 @@ router.post('/singup',
     }
 );
 
-router.post('/logout', async(req, res) => {
-    const user= await userModel.findOne({"_id":req.user._id});
+router.post('/logout', privateRoutes, async(req, res) => {
+    const user= await userModel.findOne({"email":req.user.email});
     const date= new Date();
     user.last_conection= `${date}`;
     await user.save();
@@ -51,14 +50,14 @@ router.get('/githubcallback',
     async (req, res) => {
         const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.cookie("token", token, { httpOnly: true });
-        res.redirect("/products");
+        res.redirect("/");
     }
 );
 
 router.get('/current',
     passport.authenticate("jwt", { session: false }),
     async (req, res) => {
-        res.redirect("/products");
+        res.redirect("/");
     }
 );
 
@@ -69,19 +68,19 @@ router.post('/recoverPassword', async(req, res) => {
     res.status(200).send({message: "contraseña cambiada exitosamente"})
 });
 
-router.put('/premium/:uid', async(req,res) => {
+router.post('/premium/:uid', async(req,res) => {
     try {
         const {uid}= req.params;
-        const user=await userModel.findOne({"_id":uid})
+        const user=await userModel.findOne({"email":uid})
 
         if (user.rol === "usuario") {
             user.rol="premium"
             await user.save()
         }
 
-        return res.send(user)
+        return res.redirect("/")
     } catch (error) {
-        throw({error:"error"})
+        throw error;
     }  
 })
 

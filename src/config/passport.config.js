@@ -37,6 +37,7 @@ const initializePassport = () => {
             async (req, username, password, done) => {
                 const { first_name, last_name, age } = req.body;
                 let rol = "usuario";
+                let last_conection = "no conected"
 
                 try {
                     const findUser = await userModel.findOne({ email: username });
@@ -64,7 +65,7 @@ const initializePassport = () => {
                         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
                         rol,
                         cart: userCart._id,
-                        last_conection: "no conected"
+                        last_conection
                     });
 
                     return done(null, user);
@@ -116,8 +117,8 @@ const initializePassport = () => {
                     if (user) {
                         return done(null, user);
                     } else {
-                        const cart ={ products: [] }
-                        const userCart = await cartManager.createCart(cart)
+
+                        const userCart = await createCart();
 
                         const createUser = userModel.create({
                             first_name: profile.username,

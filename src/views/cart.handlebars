@@ -1,16 +1,44 @@
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand"></a>
+        <a class="btn" href="http://localhost:8080/">
+            Volver al inicio
+        </a>
+  </div>
+</nav>
+
 <div class="container">
-    {{#if cart}}
-        {{#each cart}}
-            <div class="card">
-                <h5 class="card-header">{{this.product.title}}</h5>
-                <div class="card-body">
-                    <p class="card-text">Cantidad:{{this.quantity}}</p>
-                    <p class="card-text">Precio: ${{this.product.price}}</p>
+    {{#if cart.products}}
+        {{#each cart.products}}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="http://localhost:8080/static/products/{{this.product.thumbnail}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{this.product.title}}</h5>
+                            <p class="card-text"><small class="text-body-secondary">Precio: ${{this.product.price}} - Cantidad: {{this.quantity}}</small></p>
+                        </div>
+                    </div>
+                    <div>
+                        <form 
+                            action="http://localhost:8080/api/carts/{{this.buyer}}/product/{{this.product._id}}" 
+                            method="get"
+                        >
+                            <button type="submit" class="btn btn-danger">X</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         {{/each}}
+        <div>
+            <form action="http://localhost:8080/api/carts/{{cart._id}}/purchase" method="post">
+                <button class="btn btn-success" type="submit">comprar</button>
+            </form>
+        </div>
     {{else}}
-        <h2>Su carrito no existe</h2>
+        <h2>Su carrito esta vacio</h2>
     {{/if}}
 </div>
 

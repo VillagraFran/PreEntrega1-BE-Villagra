@@ -7,17 +7,13 @@ class cartRepository{
     };
 
     async get(){
-        const cart= await cartModel.find().lean();
+        const cart= await cartModel.find().populate("products.product").lean();
         return cart;
     };
 
     async getById(cid){
-        const cart= await cartModel.findById(cid).lean();
+        const cart= await cartModel.findById(cid).populate("products.product").lean();
         return cart;
-    };
-
-    async update(){
-
     };
 
     async delete(cid){

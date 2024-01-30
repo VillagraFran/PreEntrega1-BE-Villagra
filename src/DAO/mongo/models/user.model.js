@@ -18,12 +18,7 @@ const usersSchema = new mongoose.Schema({
       ref: 'carts',
     },
     last_conection:{
-      type: String,
-      default: "no conection"
-    },
-    document: {
-      type: Array,
-      default:[]
+      type: String
     }
   });
 

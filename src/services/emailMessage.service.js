@@ -4,15 +4,15 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'shyann.parker@ethereal.email',
-        pass: 'BJTQqWU9hzmTGTx2rq'
+        user: 'nico.stark@ethereal.email',
+        pass: 'rD2tkwjAnEDkG76tzM'
     }
 });
 
-const sendMail = async(data) => {
+export const ticketMail = async(data) => {
     const mail = {
-        from: "shyann.parker@ethereal.email",
-        to: "shyann.parker@ethereal.email",
+        from: "nico.stark@ethereal.email",
+        to: data.purchaser,
         subject: "compra realizada",
         text: "Plaintext version of the message",
         html: `
@@ -24,5 +24,3 @@ const sendMail = async(data) => {
     await transporter.sendMail(mail)
     return;
 }
-
-export default sendMail;

@@ -7,6 +7,8 @@ import swaggerUiExpress from 'swagger-ui-express';
 import __dirname from "./utils/index.js";
 import Assert from "assert";
 import handlebars from "express-handlebars"
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 import initializePassport from "./config/passport.config.js";
 
@@ -24,6 +26,18 @@ mongoose.connect(process.env.MONGO_ATLAS_URL)
 
 const app = express()
 const httpServer = app.listen(8080, ()=>console.log("on"))
+
+app.use(
+    session({
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_ATLAS_URL,
+            ttl: 100
+        }),
+        secret:"jksajskajska",
+        resave: false,
+        saveUninitialized: false,
+    })
+)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

@@ -1,15 +1,22 @@
+import { createLogger } from "winston";
 import ProductRepository from "../repository/product.repository.js";
 import { Router } from "express";
+import privateRoutes from "../middlewares/privateRoutes.js";
+import publicRoutes from "../middlewares/publicRoutes.js";
+import CartRepository from "../repository/cart.repository.js";
 
 const productRepository = new ProductRepository;
+const cartRepository = new CartRepository;
 const router = Router();
 
-router.get("/products", async (req, res) => {
+router.get("/", privateRoutes, async (req, res) => {
 
     //----PERFIL----//
     const user = req.user
 
-    if (user.rol === "usuario") {
+    if (user.rol === "admin" || user.rol === "premium") {
+        user.rol = true
+    } else {
         user.rol = undefined
     }
 
@@ -26,20 +33,30 @@ router.get("/products", async (req, res) => {
     const queryModel = query ?? {};
     const sortModel = sortOptions[sort] ?? undefined;
 
-    const products = await productManager.getProducts(limitModel, pageModel, queryModel, sortModel)
+    const products = await productRepository.get(limitModel, pageModel, queryModel, sortModel)
+    
+    products.payload.forEach(product => {
+        product["buyer"]= user.cart._id
+        product["buyer_rol"]= req.user.rol
+    });
 
     res.render("home", {
-        user: user, 
-        cartId: JSON.stringify(user.cart._id), 
+        user: user,
         products: products.payload, 
         prevLink: products.prevLink, 
         nextLink: products.nextLink
     })
 });
 
-router.get("/cart", async (req, res) => {
-    const cart = req.user.cart;
-    res.render('cart', {cart: cart.products})
+router.get("/cart", privateRoutes, async (req, res) => {
+    const cid = req.user.cart._id;
+    const cart = await cartRepository.getById(cid);
+
+    cart.products.forEach(product => {
+        product["buyer"]= req.user.cart._id
+    });
+
+    res.render('cart', {cart: cart})
 })
 
 // router.get("/chat", privateRoutes, (req, res) => {
@@ -49,11 +66,11 @@ router.get("/cart", async (req, res) => {
 //     res.render("chat", {})
 // });
 
-router.get("/login", (req, res) => {
+router.get("/login",publicRoutes, (req, res) => {
     res.render("login")
 })
 
-router.get("/singup", (req, res) => {
+router.get("/singup",publicRoutes, (req, res) => {
     res.render("register")
 })
 

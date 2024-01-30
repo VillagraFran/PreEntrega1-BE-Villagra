@@ -5,15 +5,21 @@ const productRepository = new ProductRepository();
 export const createProduct = async(req, res) => {
     try {
         const { title, description, price, code, stock, category } = req.body;
-        const thumbnail = req.file.originalname|| `img.jpg`;
-        const owner = req.user.mail;
+        let thumbnail;
+
+        if (req.file === undefined) {
+            thumbnail="defaultImg.jpg"
+        } else {
+            thumbnail=req.file.originalname
+        }
+        const owner = req.user.email;
     
         if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
             return res.status(400).json({ error: "complete todos los campos" });
         };
         
         const product = await productRepository.create(title, description, price, thumbnail, code, stock, category, owner);
-        res.status(200).send(product);
+        res.redirect('/');
 
     } catch (error) {
         throw error;
@@ -70,7 +76,7 @@ export const deleteProduct = async(req, res) => {
             const product = await productRepository.delete(pid);
             return res.status(200).send(product);
         } else {
-            return Error;
+            return res.send({message: "no tienes permiso para eliminar este producto"});
         };
         
 
